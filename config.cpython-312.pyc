@@ -1,0 +1,27 @@
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Zone:
+    code: str
+    label: str
+    timezone: str
+
+EU_ZONES = {
+    "DE-LU": Zone("DE-LU", "Germany/Luxembourg", "Europe/Berlin"),
+    "FR": Zone("FR", "France", "Europe/Paris"),
+    "PL": Zone("PL", "Poland", "Europe/Warsaw"),
+    "RO": Zone("RO", "Romania", "Europe/Bucharest"),
+    "HU": Zone("HU", "Hungary", "Europe/Budapest"),
+    "SK": Zone("SK", "Slovakia", "Europe/Bratislava"),
+    "CZ": Zone("CZ", "Czechia", "Europe/Prague"),
+    "AT": Zone("AT", "Austria", "Europe/Vienna"),
+    "NL": Zone("NL", "Netherlands", "Europe/Amsterdam"),
+    "BE": Zone("BE", "Belgium", "Europe/Brussels"),
+    "BG": Zone("BG", "Bulgaria", "Europe/Sofia"),
+    "GR": Zone("GR", "Greece", "Europe/Athens"),
+    "IT-North": Zone("IT-North", "Italy North", "Europe/Rome"),
+    "ES": Zone("ES", "Spain", "Europe/Madrid"),
+}
+
+UA_ZONE = Zone("UA-IPS", "Ukraine IPS", "Europe/Kyiv")
+DEFAULT_ZONES = ["DE-LU", "PL", "HU", "RO", "SK"]

@@ -1,0 +1,45 @@
+# DAM Top-Bottom 2/4 Spread Dashboard — Ukraine vs EU
+
+Interactive Streamlit dashboard for daily top-bottom spreads on day-ahead electricity prices.
+
+## What it calculates
+
+- **TB2** = average of 2 highest hourly DAM prices − average of 2 lowest hourly DAM prices.
+- **TB4** = average of 4 highest hourly DAM prices − average of 4 lowest hourly DAM prices.
+- **BESS proxy** = simple daily arbitrage proxy adjusted for round-trip efficiency.
+
+## Data sources
+
+- EU DAM prices: Energy-Charts public `/price` API, EUR/MWh.
+- Ukraine DAM hourly prices: OREE `pricectr`, UAH/MWh, converted into EUR/MWh.
+- FX: NBU official EUR/UAH daily exchange rate, forward-filled across non-publication days.
+
+## Local run
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+## Docker run
+
+```bash
+docker build -t tb-spread-dashboard .
+docker run --rm -p 8501:8501 tb-spread-dashboard
+```
+
+Open: http://localhost:8501
+
+## Tests
+
+```bash
+pytest -q
+```
+
+## Notes
+
+- Grouping is based on each market's local date to avoid UTC shift and DST distortions.
+- OREE parser is defensive: it scans all tables for rows with `dd.mm.yyyy` + 24 hourly numeric columns.
+- Energy-Charts public API can be rate-limited; for production, use a scheduled data collector and cache raw data.

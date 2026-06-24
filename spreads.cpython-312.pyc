@@ -1,0 +1,29 @@
+# Azure Container Apps deployment sketch
+
+```bash
+az login
+az group create -n rg-tb-spread -l westeurope
+az acr create -g rg-tb-spread -n <your_acr_name> --sku Basic
+az acr login -n <your_acr_name>
+
+docker build -t <your_acr_name>.azurecr.io/tb-spread-dashboard:latest .
+docker push <your_acr_name>.azurecr.io/tb-spread-dashboard:latest
+
+az containerapp env create \
+  -g rg-tb-spread \
+  -n cae-tb-spread \
+  -l westeurope
+
+az containerapp create \
+  -g rg-tb-spread \
+  -n tb-spread-dashboard \
+  --environment cae-tb-spread \
+  --image <your_acr_name>.azurecr.io/tb-spread-dashboard:latest \
+  --target-port 8501 \
+  --ingress external \
+  --registry-server <your_acr_name>.azurecr.io \
+  --min-replicas 1 \
+  --max-replicas 2
+```
+
+For production, add a scheduled collector that writes Parquet snapshots to Blob Storage and let Streamlit read cached files first.
